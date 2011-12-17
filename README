@@ -1,4 +1,5 @@
-<h1>My personal Vim config</h1>
+h1. My personal Vim config
 
-<p>Based on https://launchpad.net/vim-openerp</p>
-<p>Improved for JavaScript and eZ Publish</p>
+Based on "vim-openerp":https://launchpad.net/vim-openerp
+
+Improved for JavaScript and eZ Publish
