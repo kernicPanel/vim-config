@@ -3,3 +3,5 @@ h1. My personal Vim config
 Based on "vim-openerp":https://launchpad.net/vim-openerp
 
 Improved for JavaScript and eZ Publish
+
+TODO : use pathogen, make better README…
