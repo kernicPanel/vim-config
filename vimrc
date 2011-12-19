@@ -22,7 +22,6 @@
 syntax enable
 syn sync minlines=300
 "set number
-set relativenumber
 set incsearch 
 set hlsearch
 set ignorecase
@@ -43,11 +42,15 @@ set nocompatible
 filetype plugin indent on 
 
 set laststatus=2
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ [BUF=%n]\ %{strftime(\"%d-%m-%Y\ %H:%M:%S\",getftime(expand(\"%:p\")))}
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ [BUF=%n]\ %{strftime(\"%d-%m-%Y\ %H:%M:%S\",getftime(expand(\"%:p\")))}
+"set statusline=%F%m%r%h%w\ [%Y]\ [%04l,%04v]\ %p%%
+set statusline=%F%m%r%h%w\ %p%%
 
 set mouse=a
 
 set backspace=indent,eol,start
+
+set relativenumber
 
 "set guifont=Monospace\ Bold\ 12
 let t_Co=256
@@ -62,14 +65,16 @@ let g:snips_author="First Name, LAST NAME"
 au! BufRead,BufNewFile *.rml set ft=xml
 
 "
-map<F2> <ESC>:NERDTree<CR>
+map<F2> <ESC>:NERDTreeToggle<CR>
+nmap <F4> :TlistToggle<cr>
 noremap <F3> <ESC>:Dox<CR>
 inoremap <F3> <ESC>:Dox<CR>
 
 map<C-F12> <ESC>:set list!<CR>
 map<F12> <ESC>:set wrap!<CR>
 
-map <F9> :!psql -d dbname < % <BAR> less
+"map <F9> :!psql -d dbname < % <BAR> less
+map<F9> <ESC>:set paste!<CR>
 
 au BufRead .irbrc set ft=ruby
 au! BufRead,BufNewFile *.haml set ft=haml
@@ -97,19 +102,25 @@ set   directory=/tmp
 
 set wrap
 
-" {{{1 folding (see :h folding)
-" show all folds closed
-set foldenable
-" fold on markers tripple {
-set foldmethod=marker
-autocmd FileType c,cpp,d,perl,java,cs set foldmethod=syntax
-autocmd FileType python,xml set foldmethod=indent
-set foldcolumn=4
-set foldlevel=0
+"" {{{1 folding (see :h folding)
+"" show all folds closed
+"set foldenable
+"" fold on markers tripple {
+"set foldmethod=marker
+"autocmd FileType c,cpp,d,perl,java,cs set foldmethod=syntax
+"autocmd FileType python,xml set foldmethod=indent
+"set foldcolumn=4
+"set foldlevel=0
 
 "set foldmethod=indent
 highlight Folded ctermfg=6 ctermbg=0
 highlight FoldColumn ctermfg=6 ctermbg=0
+
+"folding settings
+set foldmethod=indent   "fold based on indent
+set foldnestmax=10      "deepest fold is 10 levels
+set nofoldenable        "dont fold by default
+set foldlevel=1         "this is just what i use
 
 map gf :tabedit <cfile><CR>
 
@@ -135,6 +146,7 @@ map <silent><A-Right> :tabnext<CR>
 map <silent><A-Left> :tabprevious<CR>
 map <silent><A-Up> :tabnew<CR>
 map <silent><A-Down> :tabclose<CR>
+map ç <C-x><C-o><CR>
 
 map <M-q> :bd<CR>
 
@@ -183,4 +195,30 @@ map F :TlistToggle<CR>
 " autocmd FileType python highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " autocmd FileType python match OverLength /\%80v.*/
 " autocmd FileType python set textwidth=79
-"
+
+let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+let g:SuperTabDefaultCompletionType = "context"
+
+nnoremap : à
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" togle between number nonumber and relativenumber
+" source: http://stackoverflow.com/questions/4387210/vim-how-to-map-two-tasks-under-one-shortcut-key
+" let g:relativenumber = 0
+" function! ToogleRelativeNumber()
+"     if g:relativenumber == 0
+"         let g:relativenumber = 1
+"         set norelativenumber
+"         set number
+"     elseif g:relativenumber == 1
+"         let g:relativenumber = 2
+"         set nonumber
+"         set relativenumber
+"     else
+"         let g:relativenumber = 0
+"         set nonumber
+"         set norelativenumber
+"     endif
+" endfunction
+" map <f5> :call ToogleRelativeNumber()<cr>
