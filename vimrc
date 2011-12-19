@@ -205,20 +205,20 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " togle between number nonumber and relativenumber
 " source: http://stackoverflow.com/questions/4387210/vim-how-to-map-two-tasks-under-one-shortcut-key
-" let g:relativenumber = 0
-" function! ToogleRelativeNumber()
-"     if g:relativenumber == 0
-"         let g:relativenumber = 1
-"         set norelativenumber
-"         set number
-"     elseif g:relativenumber == 1
-"         let g:relativenumber = 2
-"         set nonumber
-"         set relativenumber
-"     else
-"         let g:relativenumber = 0
-"         set nonumber
-"         set norelativenumber
-"     endif
-" endfunction
-" map <f5> :call ToogleRelativeNumber()<cr>
+let g:relativenumber = 0
+function! ToogleRelativeNumber()
+    if g:relativenumber == 0
+        let g:relativenumber = 1
+        set norelativenumber
+        set number
+    elseif g:relativenumber == 1
+        let g:relativenumber = 2
+        set nonumber
+        set relativenumber
+    else
+        let g:relativenumber = 0
+        set nonumber
+        set norelativenumber
+    endif
+endfunction
+map <f5> :call ToogleRelativeNumber()<cr>
