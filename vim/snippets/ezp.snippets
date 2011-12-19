@@ -129,10 +129,20 @@ snippet style
 	</style>${3}
 snippet base
 	<base href="${1}" target="${2}"`Close()`>
+snippet id
+	id="${1}"
+snippet class
+	class="${1}"
+snippet p
+	<p>${1}</p>
 snippet r
 	<br`Close()[1:]`>
-snippet div
+snippet div div id
 	<div id="${1:name}">
+		${2}
+	</div>
+snippet div div class
+	<div class="${1:name}">
 		${2}
 	</div>
 # Embed QT Movie
@@ -162,14 +172,22 @@ snippet form
 
 	<p><input type="submit" value="Continue &rarr;"`Close()`></p>
 	</form>
-snippet h1
-	<h1 id="${1:heading}">${2:$1}</h1>
+snippet span
+	<span>${1}</span>
+snippet h hn normal
+	<h${1:1}>${2:heading}</h$1>
+snippet h hn id
+	<h${1:1} id="${2:id}">${3:heading}</h$1>
+snippet h hn class
+	<h${1:1} class="${2:id}">${3:heading}</h$1>
 snippet input
 	<input type="${1:text/submit/hidden/button}" name="${2:some_name}" value="${3}"`Close()`>${4}
 snippet label
 	<label for="${2:$1}">${1:name}</label><input type="${3:text/submit/hidden/button}" name="${4:$2}" value="${5}" id="${6:$2}"`Close()`>${7}
 snippet link
 	<link rel="${1:stylesheet}" href="${2:/css/master.css}" type="text/css" media="${3:screen}" charset="utf-8"`Close()`>${4}
+snippet a
+	<a href="${1:url}" title="${2:title}">${3:url}</a>
 snippet mailto
 	<a href="mailto:${1:joe@example.com}?subject=${2:feedback}">${3:email me}</a>
 snippet meta
@@ -187,34 +205,42 @@ snippet table
 		<tr><th>${2:Header}</th></tr>
 		<tr><th>${3:Data}</th></tr>
 	</table>${4}
+snippet tr
+	<tr>
+	    ${1}
+	</tr>
+snippet td
+	<td>${1}</td>
 snippet textarea
 	<textarea name="${1:Name}" rows="${2:8}" cols="${3:40}">${4}</textarea>${5}
+snippet img img html
+	<img src="${1:src}" alt="${2:alt text}" />
 
 #ezTemplates
 snippet fetch content node
 	fetch('content', 'node', hash( 'node_id', ${1:NodeId} )${2}
 snippet fetch content list
-	fetch( content, list, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'list', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'offset', $view_parameters.offset,
 				    'limit', ${4} ) )
 snippet fetch content list with sort
-	fetch( content, list, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'list', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'sort_by', array( ${4} ),
 				    'offset', $view_parameters.offset,
 				    'limit', ${5} ) )
 snippet fetch content list with attribute filter
-	fetch( content, list, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'list', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'attribute_filter', array( ${4} ),
 				    'offset', $view_parameters.offset,
 				    'limit', ${5} ) )
 snippet fetch content list with attribute filter and sort
-	fetch( content, list, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'list', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'sort_by', array( ${4} ),
@@ -228,34 +254,34 @@ snippet fetch content list_count
 					  'offset', $view_parameters.offset,
 					  'limit', ${4} ) )
 snippet fetch content list_count with attribute filter
-	fetch( content, list_count, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'list_count', hash( 'parent_node_id', ${1:NodeId},
 				          'class_filter_type', ${2:include},
 				          'class_filter_array', array( ${3} ),
 				          'attribute_filter', array( ${4} ),
 				          'offset', $view_parameters.offset,
 				          'limit', ${5} ) )
 snippet fetch content tree
-	fetch( content, tree, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'tree', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'offset', $view_parameters.offset,
 				    'limit', ${4} ) )
 snippet fetch content tree with sort
-	fetch( content, tree, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'tree', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'sort_by', array( ${4} ),
 				    'offset', $view_parameters.offset,
 				    'limit', ${5} ) )
 snippet fetch content tree with attribute filter
-	fetch( content, tree, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'tree', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'attribute_filter', array( ${4} ),
 				    'offset', $view_parameters.offset,
 				    'limit', ${5} ) )
 snippet fetch content tree with attribute filter and sort
-	fetch( content, tree, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'tree', hash( 'parent_node_id', ${1:NodeId},
 				    'class_filter_type', ${2:include},
 				    'class_filter_array', array( ${3} ),
 				    'sort_by', array( ${4} ),
@@ -263,34 +289,41 @@ snippet fetch content tree with attribute filter and sort
 				    'offset', $view_parameters.offset,
 				    'limit', ${6} ) )
 snippet fetch content tree_count
-	fetch( content, tree_count, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'tree_count', hash( 'parent_node_id', ${1:NodeId},
 					  'offset', $view_parameters.offset,
-					  'limit', ${4} ) )
+					  'limit', ${2} ) )
 snippet fetch content tree_count with attribute filter
-	fetch( content, tree_count, hash( 'parent_node_id', ${1:NodeId},
+	fetch( 'content', 'tree_count', hash( 'parent_node_id', ${1:NodeId},
 				          'attribute_filter', array( ${4} ),
 				          'offset', $view_parameters.offset,
 				          'limit', ${5} ) )
+snippet fetch content collected_info_list
+	fetch( 'content', 'collected_info_list', hash( 'creator_id', ${1:creator_id},
+					  'object_id', ${2:object_id},
+					  'user_identifier', ${3:user_identifier},
+					  'limit', ${4:limit},
+					  'offset', ${5:offset},
+					  'sort_by', ${6:sort_by} ) )
 snippet ezini
 	ezini( '${1:section}', '${2:variable}', '${3:ini_file}')
 snippet attr
-	${1:var}|attribute('show'${2:, 2})
+	{${1:var}|attribute('show'${2:, 2})}
 snippet fore foreach simple
-	{foreach ${1:array} as ${2:itemVar}}
+	{foreach $${1:array} as $${2:itemVar}}
 	    ${3}
 	{/foreach}
 snippet fore foreach avec clé
-	{foreach ${1:array} as ${2:key} => ${3:itemVar}}
+	{foreach $${1:array} as $${2:key} => $${3:itemVar}}
 	    ${4}
 	{/foreach}
 snippet fore foreach avec clé et séquence
-	{foreach ${1:array} as ${2:key} => ${3:itemVar}
-	         sequence ${4:array} as ${5:sequenceVar}}
+	{foreach $${1:array} as $${2:key} => $${3:itemVar}
+	         sequence $${4:array} as $${5:sequenceVar}}
 	    ${6}
 	{/foreach}
 snippet fore foreach avec clé, séquence et délimiteur
-	{foreach ${1:array} as ${2:key} => ${3:itemVar}
-	         sequence ${4:array} as ${5:sequenceVar}}
+	{foreach $${1:array} as $${2:key} => $${3:itemVar}
+	         sequence $${4:array} as $${5:sequenceVar}}
 	    ${7}
 	    {delimiter}${6}{/delimiter}
 	{/foreach}
@@ -298,6 +331,8 @@ snippet if if
 	{if ${1:condition}}
 	    ${2}
 	{/if}
+snippet if if inline
+	{if ${1:condition}}${2}{/if}
 snippet if if else
 	{if ${1:condition}}
 	    ${2}
@@ -312,6 +347,22 @@ snippet if if elseif else
 	{else}
 	    ${4}
 	{/if}
+snippet switch
+	{switch match=${1:var}}
+	    case${2}
+	
+	    {case}
+	        
+	    {/case}
+	{/switch}
+snippet case case match
+	{case match=${1:val}}
+	    ${2}
+	{/case}
+snippet case case in
+	{case in=${1:array}}
+	    ${2}
+	{/case}
 snippet i18n
 	{'${1:source}'|i18n('${2:context}')}
 snippet gui attribute_view_gui
@@ -320,7 +371,17 @@ snippet gui attribute_edit_gui
 	{attribute_edit_gui attribute=${1:attribute}}
 snippet gui node_view_gui
 	{node_view_gui content_node=${1:node} view=${2:view_mode}}
-
-
-
-
+snippet include
+	{include uri='design:${1:path/to/file}.tpl'}
+snippet ez ezdesign
+	{${1}|ezdesign(${2:"single"})}
+snippet ez ezimage
+	{${1}|ezimage(${2:"single"})}
+snippet ez ezurl
+	{${1}|ezurl(${2:"single"})}
+snippet ez ezroot
+	{${1}|ezroot(${2:"single"})}
+snippet wash
+	{$${1:val}|wash()}
+snippet img img tpl
+	<img src={'${1:src}'|ezimage()} alt="${2:alt text}" />

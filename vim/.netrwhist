@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/dns-dev/net/internethic/Sites/ncl/mon_ezp_450/var/svn/extension/monaco/design/monaco_fre'
+let g:netrw_dirhist_2='/dns-nas/net/internethic/Users/ncl/Sources/internethic/internethic-ezpublish/extension/rezet/design/rezet/javascript/fancybox'
+let g:netrw_dirhist_3='/dns-dev/net/internethic/Sites/ncl/13h_ezp_440/settings/override'
