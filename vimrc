@@ -44,7 +44,7 @@ filetype plugin indent on
 set laststatus=2
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]\ [BUF=%n]\ %{strftime(\"%d-%m-%Y\ %H:%M:%S\",getftime(expand(\"%:p\")))}
 "set statusline=%F%m%r%h%w\ [%Y]\ [%04l,%04v]\ %p%%
-set statusline=%{fugitive#statusline()}\ %F%m%r%h%w\ %p%%
+set statusline=%F%m%r%h%w\ %p%%\ %{fugitive#statusline()}
 
 set mouse=a
 
