@@ -1,7 +1,7 @@
 "=============================================================================
 " zencoding.vim
 " Author: Yasuhiro Matsumoto <mattn.jp@gmail.com>
-" Last Change: 24-Nov-2011.
+" Last Change: 22-Nov-2011.
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -69,7 +69,7 @@ function! s:zen_parseIntoTree(abbr, type)
       let rabbr = substitute(abbr, '\([a-zA-Z][a-zA-Z0-9+]*\)+\([()]\|$\)', '\="(".s:zen_getExpandos(type, submatch(1)).")".submatch(2)', 'i')
     endif
     let abbr = rabbr
-    let mx = '\([+>]\|<\+\)\{-}\s*\((*\)\{-}\s*\([@#.]\{-}[a-zA-Z\!][a-zA-Z0-9:\!\-$]*\|{[^}]\+}\)\(\%(\%(#{[{}a-zA-Z0-9_\-\$]\+\|#[a-zA-Z0-9_\-\$]\+\)\|\%(\[[^\]]\+\]\)\|\%(\.{[{}a-zA-Z0-9_\-\$]\+\|\.[a-zA-Z0-9_\-\$]\+\)\)*\)\%(\({[^}]\+}\)\)\{0,1}\%(\s*\*\s*\([0-9]\+\)\s*\)\{0,1}\(\%(\s*)\%(\s*\*\s*[0-9]\+\s*\)\{0,1}\)*\)'
+    let mx = '\([+>]\|<\+\)\{-}\s*\((*\)\{-}\s*\([@#.]\{-}[a-zA-Z\!][a-zA-Z0-9:\!\-]*\|{[^}]\+}\)\(\%(\%(#{[{}a-zA-Z0-9_\-\$]\+\|#[a-zA-Z0-9_\-\$]\+\)\|\%(\[[^\]]\+\]\)\|\%(\.{[{}a-zA-Z0-9_\-\$]\+\|\.[a-zA-Z0-9_\-\$]\+\)\)*\)\%(\({[^}]\+}\)\)\{0,1}\%(\s*\*\s*\([0-9]\+\)\s*\)\{0,1}\(\%(\s*)\%(\s*\*\s*[0-9]\+\s*\)\{0,1}\)*\)'
   else
     let mx = '\([+>]\|<\+\)\{-}\s*\((*\)\{-}\s*\([@#.]\{-}[a-zA-Z\!][a-zA-Z0-9:\!\+\-]*\|{[^}]\+}\)\(\%(\%(#{[{}a-zA-Z0-9_\-\$]\+\|#[a-zA-Z0-9_\-\$]\+\)\|\%(\[[^\]]\+\]\)\|\%(\.{[{}a-zA-Z0-9_\-\$]\+\|\.[a-zA-Z0-9_\-\$]\+\)\)*\)\%(\({[^}]\+}\)\)\{0,1}\%(\s*\*\s*\([0-9]\+\)\s*\)\{0,1}\(\%(\s*)\%(\s*\*\s*[0-9]\+\s*\)\{0,1}\)*\)'
   endif
@@ -111,15 +111,11 @@ function! s:zen_parseIntoTree(abbr, type)
       let current.name = aliases[tag_name]
     endif
 
-    let use_pipe_for_cursor = s:zen_getResource(type, 'use_pipe_for_cursor', 1)
-
     " snippets
     let snippets = s:zen_getResource(type, 'snippets', {})
     if !empty(snippets) && has_key(snippets, tag_name)
       let snippet = snippets[tag_name]
-      if use_pipe_for_cursor
-        let snippet = substitute(snippet, '|', '${cursor}', 'g')
-      endif
+      let snippet = substitute(snippet, '|', '${cursor}', 'g')
       let lines = split(snippet, "\n")
       call map(lines, 'substitute(v:val, "\\(    \\|\\t\\)", indent, "g")')
       let current.snippet = join(lines, "\n")
@@ -133,26 +129,14 @@ function! s:zen_parseIntoTree(abbr, type)
         if has_key(default_attributes, pat)
           if type(default_attributes[pat]) == 4
             let a = default_attributes[pat]
-            if use_pipe_for_cursor
+            for k in keys(a)
+              let current.attr[k] = len(a[k]) ? substitute(a[k], '|', '${cursor}', 'g') : '${cursor}'
+            endfor
+          else
+            for a in default_attributes[pat]
               for k in keys(a)
                 let current.attr[k] = len(a[k]) ? substitute(a[k], '|', '${cursor}', 'g') : '${cursor}'
               endfor
-            else
-              for k in keys(a)
-                let current.attr[k] = a[k]
-              endfor
-            endif
-          else
-            for a in default_attributes[pat]
-              if use_pipe_for_cursor
-                for k in keys(a)
-                  let current.attr[k] = len(a[k]) ? substitute(a[k], '|', '${cursor}', 'g') : '${cursor}'
-                endfor
-              else
-                for k in keys(a)
-                  let current.attr[k] = a[k]
-                endfor
-              endif
             endfor
           endif
           if has_key(s:zen_settings.html.default_attributes, current.name)
@@ -273,17 +257,17 @@ function! s:zen_parseIntoTree(abbr, type)
     let abbr = abbr[stridx(abbr, match) + len(match):]
 
     if g:zencoding_debug > 1
-      echomsg "str=".str
-      echomsg "block_start=".block_start
-      echomsg "tag_name=".tag_name
-      echomsg "operator=".operator
-      echomsg "attributes=".attributes
-      echomsg "value=".value
-      echomsg "multiplier=".multiplier
-      echomsg "block_end=".block_end
-      echomsg "abbr=".abbr
-      echomsg "pos=".string(pos)
-      echomsg "---"
+      echo "str=".str
+      echo "block_start=".block_start
+      echo "tag_name=".tag_name
+      echo "operator=".operator
+      echo "attributes=".attributes
+      echo "value=".value
+      echo "multiplier=".multiplier
+      echo "block_end=".block_end
+      echo "abbr=".abbr
+      echo "pos=".string(pos)
+      echo "\n"
     endif
   endwhile
   return root
@@ -355,16 +339,16 @@ function! s:zen_toString_haml(settings, current, type, inline, filters, itemno, 
 
   let comment_indent = ''
   let comment = ''
-  let current_name = current.name
-  let current_name = substitute(current.name, '\$$', itemno+1, '')
   if len(current.name) > 0
-    let str .= '%' . current_name
+    let str .= '%' . current.name
     let tmp = ''
     for attr in keys(current.attr)
       let val = current.attr[attr]
-      while val =~ '\$\([^#{]\|$\)'
-        let val = substitute(val, '\(\$\+\)\([^{]\|$\)', '\=printf("%0".len(submatch(1))."d", itemno+1).submatch(2)', 'g')
-      endwhile
+      if current.multiplier > 1
+        while val =~ '\$\([^#{]\|$\)'
+          let val = substitute(val, '\(\$\+\)\([^{]\|$\)', '\=printf("%0".len(submatch(1))."d", itemno+1).submatch(2)', 'g')
+        endwhile
+      endif
       if attr == 'id'
         let str .= '#' . val
       elseif attr == 'class'
@@ -377,7 +361,7 @@ function! s:zen_toString_haml(settings, current, type, inline, filters, itemno, 
     if len(tmp)
       let str .= '{' . tmp . ' }'
     endif
-    if stridx(','.settings.html.empty_elements.',', ','.current_name.',') != -1 && len(current.value) == 0
+    if stridx(','.settings.html.empty_elements.',', ','.current.name.',') != -1 && len(current.value) == 0
       let str .= "/"
     endif
 
@@ -408,10 +392,6 @@ function! s:zen_toString_haml(settings, current, type, inline, filters, itemno, 
   return str
 endfunction
 
-function! s:zen_toString_css(settings, current, type, inline, filters, itemno, indent)
-  return ''
-endfunction
-
 function! s:zen_toString_html(settings, current, type, inline, filters, itemno, indent)
   let settings = a:settings
   let current = a:current
@@ -427,17 +407,17 @@ function! s:zen_toString_html(settings, current, type, inline, filters, itemno, 
   if s:zen_useFilter(filters, 'c')
     let comment_indent = substitute(str, '^.*\(\s*\)$', '\1', '')
   endif
-  let current_name = current.name
-  let current_name = substitute(current.name, '\$$', itemno+1, '')
-  let tmp = '<' . current_name
+  let tmp = '<' . current.name
   for attr in keys(current.attr)
-    if current_name =~ '^\(xsl:with-param\|xsl:variable\)$' && s:zen_useFilter(filters, 'xsl') && len(current.child) && attr == 'select'
+    if current.name =~ '^\(xsl:with-param\|xsl:variable\)$' && s:zen_useFilter(filters, 'xsl') && len(current.child) && attr == 'select'
       continue
     endif
     let val = current.attr[attr]
-    while val =~ '\$\([^#{]\|$\)'
-      let val = substitute(val, '\(\$\+\)\([^{]\|$\)', '\=printf("%0".len(submatch(1))."d", itemno+1).submatch(2)', 'g')
-    endwhile
+    if current.multiplier > 1
+      while val =~ '\$\([^#{]\|$\)'
+        let val = substitute(val, '\(\$\+\)\([^{]\|$\)', '\=printf("%0".len(submatch(1))."d", itemno+1).submatch(2)', 'g')
+      endwhile
+    endif
     let tmp .= ' ' . attr . '="' . val . '"'
     if s:zen_useFilter(filters, 'c')
       if attr == 'id' | let comment .= '#' . val | endif
@@ -449,7 +429,7 @@ function! s:zen_toString_html(settings, current, type, inline, filters, itemno, 
   endif
   let str .= tmp
   let inner = current.value[1:-2]
-  if stridx(','.settings.html.inline_elements.',', ','.current_name.',') != -1
+  if stridx(','.settings.html.inline_elements.',', ','.current.name.',') != -1
     let child_inline = 1
   else
     let child_inline = 0
@@ -462,43 +442,43 @@ function! s:zen_toString_html(settings, current, type, inline, filters, itemno, 
     let inner .= html
   endfor
   if len(current.child) == 1 && current.child[0].name == ''
-    if stridx(','.settings.html.inline_elements.',', ','.current_name.',') == -1
-      let str .= ">" . inner . "</" . current_name . ">\n"
+    if stridx(','.settings.html.inline_elements.',', ','.current.name.',') == -1
+      let str .= ">" . inner . "</" . current.name . ">\n"
     else
-      let str .= ">" . inner . "</" . current_name . ">"
+      let str .= ">" . inner . "</" . current.name . ">"
     endif
   elseif len(current.child)
     if inline == 0
-      if stridx(','.settings.html.inline_elements.',', ','.current_name.',') == -1
+      if stridx(','.settings.html.inline_elements.',', ','.current.name.',') == -1
         if inner =~ "\n$"
           let inner = substitute(inner, "\n", "\n" . indent, 'g')
           let inner = substitute(inner, indent . "$", "", 'g')
-          let str .= ">\n" . indent . inner . "</" . current_name . ">\n"
+          let str .= ">\n" . indent . inner . "</" . current.name . ">\n"
         else
-          let str .= ">\n" . indent . inner . indent . "\n</" . current_name . ">\n"
+          let str .= ">\n" . indent . inner . indent . "\n</" . current.name . ">\n"
         endif
       else
-        let str .= ">" . inner . "</" . current_name . ">\n"
+        let str .= ">" . inner . "</" . current.name . ">\n"
       endif
     else
-      let str .= ">" . inner . "</" . current_name . ">"
+      let str .= ">" . inner . "</" . current.name . ">"
     endif
   else
     if inline == 0
-      if stridx(','.settings.html.empty_elements.',', ','.current_name.',') != -1
+      if stridx(','.settings.html.empty_elements.',', ','.current.name.',') != -1
         let str .= " />\n"
       else
-        if stridx(','.settings.html.inline_elements.',', ','.current_name.',') == -1 && len(current.child)
-          let str .= ">\n" . inner . '${cursor}</' . current_name . ">\n"
+        if stridx(','.settings.html.inline_elements.',', ','.current.name.',') == -1 && len(current.child)
+          let str .= ">\n" . inner . '${cursor}</' . current.name . ">\n"
         else
-          let str .= ">" . inner . '${cursor}</' . current_name . ">\n"
+          let str .= ">" . inner . '${cursor}</' . current.name . ">\n"
         endif
       endif
     else
-      if stridx(','.settings.html.empty_elements.',', ','.current_name.',') != -1
+      if stridx(','.settings.html.empty_elements.',', ','.current.name.',') != -1
         let str .= " />"
       else
-        let str .= ">" . inner . '${cursor}</' . current_name . ">"
+        let str .= ">" . inner . '${cursor}</' . current.name . ">"
       endif
     endif
   endif
@@ -541,15 +521,12 @@ function! s:zen_toString(...)
   endif
   let itemno = 0
   let str = ''
-  let use_pipe_for_cursor = s:zen_getResource(type, 'use_pipe_for_cursor', 1)
   while itemno < current.multiplier
     if len(current.name)
       let inner = ''
       if exists('*g:zen_toString_'.type)
         let inner = function('g:zen_toString_'.type)(s:zen_settings, current, type, inline, filters, itemno, indent)
-      elseif type == 'css'
-        let inner = s:zen_toString_css(s:zen_settings, current, type, inline, filters, itemno, indent)
-      elseif type == 'haml' || s:zen_useFilter(filters, 'haml')
+      elseif s:zen_useFilter(filters, 'haml')
         let inner = s:zen_toString_haml(s:zen_settings, current, type, inline, filters, itemno, indent)
       else
         let inner = s:zen_toString_html(s:zen_settings, current, type, inline, filters, itemno, indent)
@@ -567,10 +544,7 @@ function! s:zen_toString(...)
         endif
       endif
       if len(snippet) > 0
-        let tmp = snippet
-        if use_pipe_for_cursor
-          let tmp = substitute(tmp, '|', '${cursor}', 'g')
-        endif
+        let tmp = substitute(snippet, '|', '${cursor}', 'g')
         let tmp = substitute(tmp, '\${zenname}', current.name, 'g')
         if type == 'css' && s:zen_useFilter(filters, 'fc')
           let tmp = substitute(tmp, '^\([^:]\+\):\(.*\)$', '\1: \2', '')
@@ -617,12 +591,7 @@ function! s:zen_getResource(type, name, default)
   let ret = a:default
 
   if has_key(s:zen_settings[a:type], a:name)
-    let v = s:zen_settings[a:type][a:name]
-    if type(ret) == 3 || type(ret) == 4
-      call s:zen_mergeConfig(ret, s:zen_settings[a:type][a:name])
-    else
-      let ret = s:zen_settings[a:type][a:name]
-    endif
+    call s:zen_mergeConfig(ret, s:zen_settings[a:type][a:name])
   endif
 
   if has_key(s:zen_settings[a:type], 'extends')
@@ -715,21 +684,23 @@ function! zencoding#expandAbbr(mode) range
             let str .= lpart . "\n"
           endif
         endfor
-        let leader .= (str =~ "\n" ? "{\n" : "{") . str . "}"
-        let items = s:zen_parseIntoTree(leader, type).child
+        if len(leader)
+          let items = s:zen_parseIntoTree(leader, type).child
+          let items[0].value = "{\n".str."}"
+        else
+          let items = s:zen_parseIntoTree(leader, type).child
+          let items[0].value = "{".str."}"
+        endif
       else
-        let save_regcont = @"
-        let save_regtype = getregtype('"')
-        silent! normal! gvygv
-        let str = @"
-        call setreg('"', save_regcont, save_regtype)
-        "let str .= getline(a:firstline)
-        let items = s:zen_parseIntoTree(leader . "{".str."}", type).child
+        let str .= getline(a:firstline)
+        let items = s:zen_parseIntoTree(leader, type).child
+        let items[0].value = "{".str."}"
       endif
       for item in items
         let expand .= s:zen_toString(item, type, 0, filters)
       endfor
     endif
+    silent! exe "normal! gvc"
   else
     let line = getline('.')
     if col('.') < len(line)
@@ -769,35 +740,28 @@ function! zencoding#expandAbbr(mode) range
     endif
     let expand = substitute(expand, '${lang}', s:zen_settings.lang, 'g')
     let expand = substitute(expand, '${charset}', s:zen_settings.charset, 'g')
+    let expand = substitute(expand, '\${cursor}', '$cursor$', '')
+    let expand = substitute(expand, '\${cursor}', '', 'g')
     if has_key(s:zen_settings, 'timezone') && len(s:zen_settings.timezone)
       let expand = substitute(expand, '${datetime}', strftime("%Y-%m-%dT%H:%M:%S") . s:zen_settings.timezone, 'g')
     else
       " TODO: on windows, %z/%Z is 'Tokyo(Standard)'
       let expand = substitute(expand, '${datetime}', strftime("%Y-%m-%dT%H:%M:%S %z"), 'g')
     endif
-    if a:mode == 2 && a:firstline == a:lastline
-      let expand = substitute(expand, '>\n\s*', '>', 'g')
-      let expand = substitute(expand, '\${cursor}', '', '')
-      call feedkeys("gvc".expand, 'n')
+    if line[:-len(part)-1] =~ '^\s\+$'
+      let indent = line[:-len(part)-1]
     else
-      let expand = substitute(expand, '\${cursor}', '$cursor$', '')
-      let expand = substitute(expand, '\${cursor}', '', 'g')
-      if line[:-len(part)-1] =~ '^\s\+$'
-        let indent = line[:-len(part)-1]
-      else
-        let indent = ''
-      endif
-      let expand = substitute(expand, '\n\s*$', '', 'g')
-      let expand = line[:-len(part)-1] . substitute(expand, "\n", "\n" . indent, 'g') . rest
-      let lines = split(expand, '\n')
-      silent! exe "normal! gvc"
-      call setline(line('.'), lines[0])
-      if len(lines) > 1
-        call append(line('.'), lines[1:])
-      endif
-      silent! exe "normal! ".len(part)."h"
+      let indent = ''
+    endif
+    let expand = substitute(expand, '\n\s*$', '', 'g')
+    let expand = line[:-len(part)-1] . substitute(expand, "\n", "\n" . indent, 'g') . rest
+    let lines = split(expand, '\n')
+    call setline(line('.'), lines[0])
+    if len(lines) > 1
+      call append(line('.'), lines[1:])
     endif
   endif
+  silent! exe "normal! ".len(part)."h"
   if search('\$cursor\$', 'e')
     let oldselection = &selection
     let &selection = 'inclusive'
@@ -882,53 +846,59 @@ function! zencoding#toggleComment()
     return
   endif
 
-  let orgpos = getpos('.')
   let curpos = getpos('.')
-  let mx = '<\%#[^>]*>'
   while 1
-    let block = s:search_region('<!--', '-->')
-    if s:region_is_valid(block)
-      let block[1][1] += 2
-      let content = s:get_content(block)
-      let content = substitute(content, '^<!--\s\(.*\)\s-->$', '\1', '')
-      call s:change_content(block, content)
-      silent! call setpos('.', orgpos)
-      return
-    endif
-    let block = s:search_region('<[^>]', '>')
-    if !s:region_is_valid(block)
-      let pos1 = searchpos('<', 'bcW')
-      if pos1[0] == 0 && pos1[1] == 0
-        return
+    let mx = '<\(/\{0,1}[a-zA-Z][a-zA-Z0-9]*\)[^>]*>'
+    let pos1 = searchpos(mx, 'bcnW')
+    let content = matchstr(getline(pos1[0])[pos1[1]-1:], mx)
+    let tag_name = substitute(content, '^<\(/\{0,1}[a-zA-Z0-9]*\).*$', '\1', '')
+    let block = [pos1, [pos1[0], pos1[1] + len(content) - 1]]
+    if content[-2:] == '/>' && s:point_in_region(curpos[1:2], block)
+      let comment_region = s:search_region('<!--', '-->')
+      if !s:region_is_valid(comment_region) || !s:point_in_region(curpos[1:2], comment_region) || !(s:point_in_region(comment_region[0], block) && s:point_in_region(comment_region[1], block))
+        let content = '<!-- ' . s:get_content(block) . ' -->'
+        call s:change_content(block, content)
+      else
+        let content = s:get_content(comment_region)
+        let content = substitute(content, '^<!--\s\(.*\)\s-->$', '\1', '')
+        call s:change_content(comment_region, content)
       endif
-      let curpos = getpos('.')
-      continue
-    endif
-    let pos1 = block[0]
-    let pos2 = block[1]
-    let content = s:get_content(block)
-    let tag_name = matchstr(content, '^<\zs/\{0,1}[^ \r\n>]\+')
-    if tag_name[0] == '/'
-      call setpos('.', [0, pos1[0], pos1[1], 0])
-      let pos2 = searchpairpos('<'. tag_name[1:] . '>', '', '</' . tag_name[1:] . '>', 'bnW')
-      let pos1 = searchpos('>', 'cneW')
-      let block = [pos2, pos1]
+      return
     else
-      call setpos('.', [0, pos2[0], pos2[1], 0])
-      let pos2 = searchpairpos('<'. tag_name . '>', '', '</' . tag_name . '>', 'nW')
-      call setpos('.', [0, pos2[0], pos2[1], 0])
-      let pos2 = searchpos('>', 'cneW')
+      if tag_name[0] == '/'
+        let pos1 = searchpos('<' . tag_name[1:] . '[^a-zA-Z0-9]', 'bcnW')
+        call setpos('.', [0, pos1[0], pos1[1], 0])
+        let pos2 = searchpos('</' . tag_name[1:] . '>', 'cneW')
+      else
+        let pos2 = searchpos('</' . tag_name . '>', 'cneW')
+      endif
       let block = [pos1, pos2]
-    endif
-    if !s:region_is_valid(block)
-      silent! call setpos('.', orgpos)
-      return
-    endif
-    if s:point_in_region(curpos[1:2], block)
-      let content = '<!-- ' . s:get_content(block) . ' -->'
-      call s:change_content(block, content)
-      silent! call setpos('.', orgpos)
-      return
+      if !s:region_is_valid(block)
+        call setpos('.', curpos)
+        let block = s:search_region('<!', '-->')
+        if !s:region_is_valid(block)
+          return
+        endif
+      endif
+      if s:point_in_region(curpos[1:2], block)
+        let comment_region = s:search_region('<!--', '-->')
+        if !s:region_is_valid(comment_region) || !s:point_in_region(curpos[1:2], comment_region) || !(s:point_in_region(comment_region[0], block) && s:point_in_region(comment_region[1], block))
+          let content = '<!-- ' . s:get_content(block) . ' -->'
+          call s:change_content(block, content)
+        else
+          let content = s:get_content(comment_region)
+          let content = substitute(content, '^<!--\s\(.*\)\s-->$', '\1', '')
+          call s:change_content(comment_region, content)
+        endif
+        return
+      else
+        if block[0][0] > 0
+          call setpos('.', [0, block[0][0]-1, block[0][1], 0])
+        else
+          call setpos('.', curpos)
+          return
+        endif
+      endif
     endif
   endwhile
 endfunction
@@ -1302,7 +1272,7 @@ endfunction
 " search_region : make region from pattern which is composing start/end
 "   this function return array of position
 function! s:search_region(start, end)
-  return [searchpairpos(a:start, '', a:end, 'bcnW'), searchpairpos(a:start, '', a:end, 'nW')]
+  return [searchpos(a:start, 'bcnW'), searchpos(a:end, 'cneW')]
 endfunction
 
 " get_content : get content in region
