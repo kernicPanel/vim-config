@@ -196,7 +196,7 @@ map F :TlistToggle<CR>
 " autocmd FileType python match OverLength /\%80v.*/
 " autocmd FileType python set textwidth=79
 
-let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+"let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 let g:SuperTabDefaultCompletionType = "context"
 
 nnoremap à :

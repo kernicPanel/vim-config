@@ -1,5 +1,5 @@
 " ~/vim-config/vim/sessions/snippets.vim: Vim session script.
-" Created by session.vim 1.4.24 on 01 janvier 2012 at 13:31:34.
+" Created by session.vim 1.4.24 on 01 janvier 2012 at 15:40:30.
 " Open this file in Vim and run :source % to restore your session.
 
 set guioptions=
@@ -157,12 +157,12 @@ setlocal fdl=1
 setlocal fml=1
 setlocal fdn=10
 setlocal nofen
-let s:l = 51 - ((4 * winheight(0) + 23) / 46)
+let s:l = 199 - ((16 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-51
-normal! 029l
+199
+normal! 0
 lcd ~/vim-config
 tabnext 6
 if exists('s:wipebuf')
