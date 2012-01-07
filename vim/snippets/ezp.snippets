@@ -304,8 +304,6 @@ snippet fetch content collected_info_list
 					  'limit', ${4:limit},
 					  'offset', ${5:offset},
 					  'sort_by', ${6:sort_by} ) )
-snippet ezini
-	ezini( '${1:section}', '${2:variable}', '${3:ini_file}')
 snippet attr
 	{${1:var}|attribute('show'${2:, 2})}
 snippet fore foreach simple
@@ -373,6 +371,8 @@ snippet gui node_view_gui
 	{node_view_gui content_node=${1:node} view=${2:view_mode}}
 snippet include
 	{include uri='design:${1:path/to/file}.tpl'}
+snippet ez ezini
+	ezini( '${1:section}', '${2:variable}', '${3:ini_file}')
 snippet ez ezdesign
 	{${1}|ezdesign(${2:"single"})}
 snippet ez ezimage
