@@ -223,3 +223,6 @@ function! ToogleRelativeNumber()
 endfunction
 map <f5> :call ToogleRelativeNumber()<cr>
 call pathogen#infect()
+
+" config bépo
+source ~/.vim/vimrc.bepo

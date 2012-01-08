@@ -1,5 +1,5 @@
 " ~/vim-config/vim/sessions/snippets.vim: Vim session script.
-" Created by session.vim 1.4.24 on 07 janvier 2012 at 15:27:45.
+" Created by session.vim 1.4.24 on 08 janvier 2012 at 19:46:53.
 " Open this file in Vim and run :source % to restore your session.
 
 set guioptions=
@@ -42,7 +42,7 @@ badd +1 vim-config/vim/snippets/javascript-jquery/click.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/bind.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/attrm.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/attr.snippet
-badd +1 vim-config/vim/snippets/javascript-jquery/ajax.snippet
+badd +18 vim-config/vim/snippets/javascript-jquery/ajax.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/ajaxgetif.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/ajaxpost.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/ajaxsetup.snippet
@@ -60,6 +60,19 @@ badd +433 vim-config/vim/autoload/snipMate.vim
 badd +1 vim-config/vim/ftdetect/ezp.vim
 badd +1 vim-config/vim/ftpplugin/jslint.vim
 badd +1 vim-config/vim/ftplugin/javascript/jslint.vim
+badd +133 vim-config/vim/snippets/javascript-jquery.snippets
+badd +1 vim-config/vim/snippets/javascript-jquery/add.snippet
+badd +1 vim-config/vim/snippets/javascript-jquery/addClass.snippet
+badd +231 vim-config/vim/snippets/javascript-jquery/snip.snippet
+badd +1 vim-config/vim/snippets/javascript-jquery/after.snippet
+badd +1 vim-config/vim/snippets/javascript-jquery/get.snippet
+badd +5 vim-config/vim/snippets/javascript-jquery/getjson.snippet
+badd +1 vim-config/vim/snippets/javascript-jquery/loadf.snippet
+badd +2 vim-config/vim/snippets/javascript-jquery/loadif.snippet
+badd +3 vim-config/vim/snippets/javascript-jquery/mdown.snippet
+badd +1 vim-config/vim/snippets/javascript-jquery/load.snippet
+badd +1 vim-config/vimrc.bepo
+badd +1 vim-config/vim/snippets/javascript-jquery/loadf.snippet
 args vim-openerp/vim/snippets/css.snippets
 set lines=49 columns=194
 set splitbelow splitright
@@ -69,7 +82,7 @@ wincmd t
 set winheight=1 winwidth=1
 argglobal
 enew
-" file NERD_tree_1
+" file NERD_tree_3
 setlocal fdm=indent
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -94,38 +107,19 @@ setlocal fdl=1
 setlocal fml=1
 setlocal fdn=10
 setlocal nofen
-let s:l = 199 - ((0 * winheight(0) + 23) / 46)
+let s:l = 228 - ((0 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-199
-normal! 0
+228
+normal! 023l
 lcd ~/vim-config
-tabedit ~/vim-config/vim/after/plugin/snipMate.vim
+tabedit ~/vim-config/vim/snippets/snippet.snippets
 set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 31 + 97) / 194)
-exe 'vert 2resize ' . ((&columns * 162 + 97) / 194)
-argglobal
-enew
-" file ~/vim-config/NERD_tree_2
-setlocal fdm=indent
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=1
-setlocal fml=1
-setlocal fdn=10
-setlocal nofen
-lcd ~/vim-config
-wincmd w
 argglobal
 setlocal fdm=indent
 setlocal fde=0
@@ -135,16 +129,13 @@ setlocal fdl=1
 setlocal fml=1
 setlocal fdn=10
 setlocal nofen
-let s:l = 1 - ((0 * winheight(0) + 23) / 46)
+let s:l = 8 - ((7 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
-lcd ~/vim-config/vim/after/plugin
-wincmd w
-exe 'vert 1resize ' . ((&columns * 31 + 97) / 194)
-exe 'vert 2resize ' . ((&columns * 162 + 97) / 194)
+8
+normal! 08l
+lcd ~/vim-config/vim/snippets
 tabedit ~/vim-config/vim/snippets/ezp.snippets
 set splitbelow splitright
 set nosplitbelow
@@ -191,10 +182,16 @@ normal! 0
 lcd ~/vim-config/vim/snippets
 tabedit ~/vim-config/vim/snippets/javascript.snippets
 set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 97 + 97) / 194)
+exe 'vert 2resize ' . ((&columns * 96 + 97) / 194)
 argglobal
 setlocal fdm=indent
 setlocal fde=0
@@ -204,13 +201,34 @@ setlocal fdl=1
 setlocal fml=1
 setlocal fdn=10
 setlocal nofen
-let s:l = 1 - ((0 * winheight(0) + 23) / 46)
+let s:l = 16 - ((15 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+16
+normal! 019l
+lcd ~/vim-config/vim/snippets
+wincmd w
+argglobal
+edit ~/vim-config/vim/snippets/javascript-jquery.snippets
+setlocal fdm=indent
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=1
+setlocal fml=1
+setlocal fdn=10
+setlocal nofen
+let s:l = 221 - ((5 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+221
 normal! 0
 lcd ~/vim-config/vim/snippets
+wincmd w
+exe 'vert 1resize ' . ((&columns * 97 + 97) / 194)
+exe 'vert 2resize ' . ((&columns * 96 + 97) / 194)
 tabedit ~/vim-config/vim/snippets/php.snippets
 set splitbelow splitright
 set nosplitbelow
@@ -233,7 +251,7 @@ normal! zt
 1
 normal! 0
 lcd ~/vim-config/vim/snippets
-tabnext 3
+tabnext 6
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif
@@ -251,13 +269,7 @@ tabnext 1
 let s:bufnr = bufnr("%")
 NERDTree ~/vim-openerp/vim/snippets
 execute "bwipeout" s:bufnr
-tabnext 3
-1wincmd w
-let s:bufnr = bufnr("%")
-NERDTree ~/vim-config
-execute "bwipeout" s:bufnr
-1resize 46|vert 1resize 31|2resize 46|vert 2resize 162|
-tabnext 3
+tabnext 6
 1wincmd w
 
 " vim: ft=vim ro nowrap smc=128
