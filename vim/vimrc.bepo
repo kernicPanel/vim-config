@@ -1,3 +1,6 @@
+" remap : sur à
+nnoremap à :
+
 " {W} -> [É]
 " ——————————
 " On remappe W sur É :
