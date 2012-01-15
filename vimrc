@@ -67,6 +67,8 @@ au! BufRead,BufNewFile *.rml set ft=xml
 "
 map<F2> <ESC>:NERDTreeToggle<CR>
 nmap <F4> :TlistToggle<cr>
+" let Tlist_Show_One_File = 1
+
 noremap <F3> <ESC>:Dox<CR>
 inoremap <F3> <ESC>:Dox<CR>
 
