@@ -148,7 +148,7 @@ map <silent><A-Right> :tabnext<CR>
 map <silent><A-Left> :tabprevious<CR>
 map <silent><A-Up> :tabnew<CR>
 map <silent><A-Down> :tabclose<CR>
-map ç <C-x><C-o><CR>
+map Ç <C-x><C-o><CR>
 
 map <M-q> :bd<CR>
 
@@ -170,8 +170,8 @@ cabbr td tab delete
 "imap <Right> <Esc>
 
 
-map T :TaskList<CR>
-map F :TlistToggle<CR>
+"map T :TaskList<CR>
+"map F :TlistToggle<CR>
 
 "
 " Uncomment this if you want to use pylint checker when you save your file

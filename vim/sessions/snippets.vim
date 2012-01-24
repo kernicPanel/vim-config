@@ -1,5 +1,5 @@
 " ~/vim-config/vim/sessions/snippets.vim: Vim session script.
-" Created by session.vim 1.4.24 on 11 janvier 2012 at 12:51:30.
+" Created by session.vim 1.4.24 on 19 janvier 2012 at 14:28:12.
 " Open this file in Vim and run :source % to restore your session.
 
 set guioptions=
@@ -30,7 +30,7 @@ badd +5 vim-openerp/vim/snippets/javascript-jquery/ajaxpost.snippet
 badd +18 vim-openerp/vim/snippets/javascript-jquery/ajax.snippet
 badd +1 vim-openerp/vim/snippets/javascript-jquery/next.snippet
 badd +1 vim-openerp/vimrc
-badd +81 vim-config/vimrc
+badd +54 vim-config/vimrc
 badd +1 vim-config/vim/snippets/php.snippets
 badd +1 vim-config/vim/snippets/javascript.snippets
 badd +1 vim-config/vim/snippets/css.snippets
@@ -72,6 +72,7 @@ badd +2 vim-config/vim/snippets/javascript-jquery/loadif.snippet
 badd +3 vim-config/vim/snippets/javascript-jquery/mdown.snippet
 badd +1 vim-config/vim/snippets/javascript-jquery/load.snippet
 badd +1 vim-config/vimrc.bepo
+badd +28 vim-config/vim/vimrc.bepo
 args vim-openerp/vim/snippets/css.snippets
 set lines=49 columns=176
 set splitbelow splitright
@@ -93,10 +94,16 @@ setlocal nofen
 lcd ~/vim-openerp/vim/snippets
 tabedit ~/vim-config/vimrc
 set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 88 + 88) / 176)
+exe 'vert 2resize ' . ((&columns * 87 + 88) / 176)
 argglobal
 setlocal fdm=indent
 setlocal fde=0
@@ -106,13 +113,34 @@ setlocal fdl=1
 setlocal fml=1
 setlocal fdn=10
 setlocal nofen
-let s:l = 46 - ((45 * winheight(0) + 23) / 46)
+let s:l = 122 - ((22 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-46
-normal! 0
+122
+normal! 017l
 lcd ~/vim-config
+wincmd w
+argglobal
+edit ~/vim-config/vim/vimrc.bepo
+setlocal fdm=indent
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=1
+setlocal fml=1
+setlocal fdn=10
+setlocal nofen
+let s:l = 15 - ((14 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+15
+normal! 019l
+lcd ~/vim-config/vim
+wincmd w
+exe 'vert 1resize ' . ((&columns * 88 + 88) / 176)
+exe 'vert 2resize ' . ((&columns * 87 + 88) / 176)
 tabedit ~/vim-config/vim/snippets/snippet.snippets
 set splitbelow splitright
 set nosplitbelow
