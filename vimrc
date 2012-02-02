@@ -66,11 +66,37 @@ au! BufRead,BufNewFile *.rml set ft=xml
 
 "
 map<F2> <ESC>:NERDTreeToggle<CR>
-nmap <F4> :TlistToggle<cr>
-" let Tlist_Show_One_File = 1
+nmap <F3> :TlistToggle<cr>
+let g:Tlist_Show_One_File = 1
+let g:Tlist_File_Fold_Auto_Close = 1
+let g:Tlist_GainFocus_On_ToggleOpen = 1
 
-noremap <F3> <ESC>:Dox<CR>
-inoremap <F3> <ESC>:Dox<CR>
+map <F4> :TaskList<CR>
+let g:tlTokenList = ['FIXME', 'TODO', 'XXX', 'log', 'debug']
+
+" togle between number nonumber and relativenumber
+" source: http://stackoverflow.com/questions/4387210/vim-how-to-map-two-tasks-under-one-shortcut-key
+let g:relativenumber = 0
+function! ToogleRelativeNumber()
+    if g:relativenumber == 0
+        let g:relativenumber = 1
+        set norelativenumber
+        set number
+    elseif g:relativenumber == 1
+        let g:relativenumber = 2
+        set nonumber
+        set relativenumber
+    else
+        let g:relativenumber = 0
+        set nonumber
+        set norelativenumber
+    endif
+endfunction
+map <f5> :call ToogleRelativeNumber()<cr>
+
+noremap <F6> <ESC>:Dox<CR>
+inoremap <F6> <ESC>:Dox<CR>
+
 
 map<C-F12> <ESC>:set list!<CR>
 map<F12> <ESC>:set wrap!<CR>
@@ -170,8 +196,8 @@ cabbr td tab delete
 "imap <Right> <Esc>
 
 
-map T :TaskList<CR>
-map F :TlistToggle<CR>
+"map T :TaskList<CR>
+"map F :TlistToggle<CR>
 
 "
 " Uncomment this if you want to use pylint checker when you save your file
@@ -204,25 +230,8 @@ let g:SuperTabDefaultCompletionType = "context"
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
-" togle between number nonumber and relativenumber
-" source: http://stackoverflow.com/questions/4387210/vim-how-to-map-two-tasks-under-one-shortcut-key
-let g:relativenumber = 0
-function! ToogleRelativeNumber()
-    if g:relativenumber == 0
-        let g:relativenumber = 1
-        set norelativenumber
-        set number
-    elseif g:relativenumber == 1
-        let g:relativenumber = 2
-        set nonumber
-        set relativenumber
-    else
-        let g:relativenumber = 0
-        set nonumber
-        set norelativenumber
-    endif
-endfunction
-map <f5> :call ToogleRelativeNumber()<cr>
+
+
 call pathogen#infect()
 
 " config bépo
