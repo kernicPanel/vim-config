@@ -174,7 +174,7 @@ map <silent><A-Right> :tabnext<CR>
 map <silent><A-Left> :tabprevious<CR>
 map <silent><A-Up> :tabnew<CR>
 map <silent><A-Down> :tabclose<CR>
-map ç <C-x><C-o><CR>
+map Ç <C-x><C-o><CR>
 
 map <M-q> :bd<CR>
 

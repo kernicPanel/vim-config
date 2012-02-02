@@ -69,3 +69,4 @@ noremap g" g0
 noremap « <
 noremap » >
 
+map Ç :TaskList<CR>
