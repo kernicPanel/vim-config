@@ -50,7 +50,8 @@ set mouse=a
 
 set backspace=indent,eol,start
 
-set relativenumber
+"set relativenumber
+set number
 
 "set guifont=Monospace\ Bold\ 12
 let t_Co=256
@@ -236,3 +237,17 @@ call pathogen#infect()
 
 " config bépo
 source ~/.vim/vimrc.bepo
+
+" I haven't found how to hide this function (yet)
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+
+function! s:Repl()
+    let s:restore_reg = @"
+    return "p@=RestoreRegister()\<cr>"
+endfunction
+
+" NB: this supports "rp that replaces the selection by the contents of @r
+vnoremap <silent> <expr> p <sid>Repl()
