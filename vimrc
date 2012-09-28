@@ -27,14 +27,14 @@ set hlsearch
 set ignorecase
 set smartcase
 set tw=0
-set sw=2
-set sts=2
+set sw=4
+set sts=4
 set cindent
 set smartindent
 set autoindent
 set expandtab
 
-au FileType javascript setl sw=2 sts=2 et
+au FileType javascript setl sw=4 sts=4 et
 
 "set listchars=tab:\|\ ,trail:.,extends:>,precedes:<,eol:$
 set list listchars=tab:»·,trail:.
