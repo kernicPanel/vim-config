@@ -61,8 +61,8 @@ snippet case
 snippet for
 	var loopCount = ${1:Things}.length;
 	for (var ${2:i} = 0; $2 < loopCount; $2${3:++}) {
-		${4:$1[$2]}
-	};
+		${4:$1[$2]};
+	}
 	delete loopCount;
 # for (...) {...} (Improved Native For-Loop)
 snippet forr
@@ -121,3 +121,7 @@ snippet module
 	
 		return publicAccess;
 	}());
+snippet it
+	it('should ${1}', function(done) {
+		done();
+	});

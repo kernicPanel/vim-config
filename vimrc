@@ -27,12 +27,14 @@ set hlsearch
 set ignorecase
 set smartcase
 set tw=0
-set sw=4
-set sts=4
+set sw=2
+set sts=2
 set cindent
 set smartindent
 set autoindent
 set expandtab
+
+au FileType javascript setl sw=2 sts=2 et
 
 "set listchars=tab:\|\ ,trail:.,extends:>,precedes:<,eol:$
 set list listchars=tab:»·,trail:.
@@ -71,6 +73,9 @@ nmap <F3> :TlistToggle<cr>
 let g:Tlist_Show_One_File = 1
 let g:Tlist_File_Fold_Auto_Close = 1
 let g:Tlist_GainFocus_On_ToggleOpen = 1
+
+let mapleader = ","
+let g:mapleader = ","
 
 map <F4> :TaskList<CR>
 let g:tlTokenList = ['FIXME', 'TODO', 'XXX', 'log', 'debug']
@@ -228,6 +233,15 @@ cabbr td tab delete
 "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 let g:SuperTabDefaultCompletionType = "context"
 
+let g:slime_target = "tmux"
+"xmap <leader>s <Plug>SlimeRegionSend
+"nmap <leader>s <Plug>PlugSlimeParagraphSend
+
+let g:slime_no_mappings = 1
+xmap <leader>s <Plug>SlimeRegionSend
+nmap <leader>s <Plug>SlimeMotionSend
+nmap <leader>ss <Plug>SlimeLineSend
+
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
@@ -251,3 +265,5 @@ endfunction
 
 " NB: this supports "rp that replaces the selection by the contents of @r
 vnoremap <silent> <expr> p <sid>Repl()
+
+set fcs+=vert:│
