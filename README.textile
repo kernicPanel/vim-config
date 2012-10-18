@@ -5,3 +5,4 @@ Based on "vim-openerp":https://launchpad.net/vim-openerp
 Improved for JavaScript and eZ Publish
 
 TODO : use pathogen for all plugins, make better README…
+
