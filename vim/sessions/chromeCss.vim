@@ -1,5 +1,5 @@
-" ~/vim-openerp/vim/sessions/chromeCss.vim: Vim session script.
-" Created by session.vim 1.4.24 on 13 décembre 2011 at 14:04:36.
+" ~/vim-config/vim/sessions/chromeCss.vim: Vim session script.
+" Created by session.vim 1.4.24 on 16 juillet 2012 at 21:22:51.
 " Open this file in Vim and run :source % to restore your session.
 
 set guioptions=
@@ -22,31 +22,54 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +0 .config/google-chrome/Default/User\ StyleSheets/Custom.css
+badd +1 .config/google-chrome/Default/User\ StyleSheets/Custom.css
 args .config/google-chrome/Default/User\ StyleSheets/Custom.css
-set lines=49 columns=176
+set lines=57 columns=227
 edit .config/google-chrome/Default/User\ StyleSheets/Custom.css
 set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 31 + 113) / 227)
+exe 'vert 2resize ' . ((&columns * 195 + 113) / 227)
 argglobal
-setlocal fdm=marker
+enew
+" file NERD_tree_1
+setlocal fdm=indent
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=0
+setlocal fdl=1
 setlocal fml=1
-setlocal fdn=20
-setlocal fen
-let s:l = 359 - ((24 * winheight(0) + 23) / 47)
+setlocal fdn=10
+setlocal nofen
+lcd ~/.config/google-chrome/Default/User\ StyleSheets
+wincmd w
+argglobal
+setlocal fdm=indent
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=1
+setlocal fml=1
+setlocal fdn=10
+setlocal nofen
+let s:l = 16 - ((15 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-359
-normal! 02l
+16
+normal! 0
 lcd ~/.config/google-chrome/Default/User\ StyleSheets
+wincmd w
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 31 + 113) / 227)
+exe 'vert 2resize ' . ((&columns * 195 + 113) / 227)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
@@ -62,5 +85,11 @@ doautoall SessionLoadPost
 unlet SessionLoad
 tabnext 1
 1wincmd w
+let s:bufnr = bufnr("%")
+NERDTree ~/.config
+execute "bwipeout" s:bufnr
+1resize 55|vert 1resize 31|2resize 55|vert 2resize 195|
+tabnext 1
+2wincmd w
 
 " vim: ft=vim ro nowrap smc=128
